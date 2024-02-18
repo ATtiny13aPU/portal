@@ -143,21 +143,8 @@ float color_normal(vec3 normal, vec4 direction) {
 // Returns grid color based on position and start color. Copy-pasted somewhere from shadertoy.
 vec3 color_grid(vec3 start, vec2 uv) {
     if (_grid_disable == 1) return start;
-
-    int x = int(abs(uv.x/2.));
-    int y = int(abs(uv.y/2.));
-
-    if (uv.x < 0.) x = x+1;
-    if (uv.y < 0.) y = y+1;
-
-    x = x + y;
-    y = 2;
-
-    if (x - y * (x/y) == 1) {
-        return start * 0.7;
-    } else {
-        return start * 1.1;
-    }
+	uv = fract(uv * -0.25);
+	return start * mix(mix(0.7, 1.1, step(uv.x, 0.5)), mix(1.1, 0.7, step(uv.x, 0.5)), step(uv.y, 0.5));
 }
 
 // Adds color `b` to color `a` with coef, that must lie in [0..1]. If coef == 0, then result is `a`, if coef == 1.0, then result is `b`.
